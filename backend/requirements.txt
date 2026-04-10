@@ -19,7 +19,7 @@ requests==2.31.0
 
 # Automation
 pyautogui==0.9.54
-Pillow==10.3.0
+Pillow==12.1.1
 
 # Windows-specific (optional, only on Windows)
 # pywin32==306
