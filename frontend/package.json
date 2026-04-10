@@ -1,0 +1,51 @@
+{
+  "name": "access-vibe-coding-frontend",
+  "version": "1.0.0",
+  "description": "Access Vibe Coding - AI-powered Microsoft Access automation",
+  "main": "main.js",
+  "scripts": {
+    "start": "concurrently \"npm run start:react\" \"wait-on http://localhost:5173 && electron .\"",
+    "start:react": "vite",
+    "start:electron": "electron .",
+    "build": "vite build && electron-builder",
+    "build:win": "vite build && electron-builder --win",
+    "build:mac": "vite build && electron-builder --mac",
+    "build:linux": "vite build && electron-builder --linux",
+    "preview": "vite preview",
+    "lint": "eslint src --ext .jsx,.js",
+    "test": "vitest"
+  },
+  "keywords": [
+    "electron",
+    "react",
+    "microsoft-access",
+    "automation",
+    "llm",
+    "ai"
+  ],
+  "author": "Access Vibe Coding",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.0",
+    "antd": "^5.12.8",
+    "@ant-design/icons": "^5.2.6",
+    "axios": "^1.6.2",
+    "dayjs": "^1.11.10"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.0.8",
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1",
+    "concurrently": "^8.2.2",
+    "wait-on": "^7.2.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2",
+    "vitest": "^1.1.0"
+  },
+  "build": {
+    "extends": "./electron-builder.json"
+  }
+}

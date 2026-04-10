@@ -1,0 +1,40 @@
+/* Component-specific styles */
+
+/* LLM Config */
+.llm-config .ant-card-head {
+  border-bottom-color: #f0f0f0;
+}
+
+/* History page */
+.ant-table-tbody > tr > td {
+  vertical-align: middle;
+}
+
+/* Sidebar active item */
+.ant-menu-item-selected {
+  font-weight: 600;
+}
+
+/* Loading states */
+.ant-spin-nested-loading {
+  width: 100%;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #bfbfbf;
+}

@@ -1,0 +1,38 @@
+/* Theme variables */
+:root {
+  --primary-color: #1677ff;
+  --success-color: #52c41a;
+  --warning-color: #faad14;
+  --error-color: #ff4d4f;
+  --bg-color: #f5f5f5;
+  --card-bg: #ffffff;
+  --text-primary: rgba(0, 0, 0, 0.88);
+  --text-secondary: rgba(0, 0, 0, 0.45);
+  --border-color: #d9d9d9;
+  --border-radius: 8px;
+}
+
+/* Dark theme overrides */
+.dark {
+  --bg-color: #141414;
+  --card-bg: #1f1f1f;
+  --text-primary: rgba(255, 255, 255, 0.88);
+  --text-secondary: rgba(255, 255, 255, 0.45);
+  --border-color: #434343;
+}
+
+.dark .page-header {
+  border-bottom-color: #303030;
+}
+
+.dark .instruction-input {
+  background: #1f1f1f;
+}
+
+.dark .execution-message {
+  background: #2a2a2a;
+}
+
+.dark .log-entry:hover {
+  background: #2a2a2a;
+}

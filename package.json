@@ -1,0 +1,13 @@
+# Access Vibe Coding - 项目根配置
+{
+  "name": "access-vibe-coding",
+  "version": "1.0.0",
+  "description": "AI-powered Microsoft Access automation tool",
+  "license": "MIT",
+  "scripts": {
+    "setup": "bash scripts/setup-dev.sh",
+    "dev:backend": "cd backend && python main.py",
+    "dev:frontend": "cd frontend && npm start",
+    "test": "pytest tests/ -v"
+  }
+}
