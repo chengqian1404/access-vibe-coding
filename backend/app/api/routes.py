@@ -176,7 +176,8 @@ async def test_provider_connection(request: ConfigUpdateRequest):
         else:
             return {"success": False, "message": "连接测试失败，请检查API密钥和网络"}
     except Exception as e:
-        return {"success": False, "message": f"连接测试失败: {str(e)}"}
+        logger.error(f"Connection test exception for {request.provider}: {e}")
+        return {"success": False, "message": "连接测试失败，请检查API密钥和网络连接"}
 
 
 @router.delete("/config/provider/{provider}")

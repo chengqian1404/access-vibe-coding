@@ -15,7 +15,6 @@ dashscope==1.14.1
 
 # HTTP Client
 aiohttp==3.9.1
-httpx==0.25.2
 requests==2.31.0
 
 # Automation
