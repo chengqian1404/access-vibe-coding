@@ -1,6 +1,6 @@
 import io
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -32,7 +32,7 @@ class ReportGenerator:
             f"# 直播学习分析报告",
             f"",
             f"**录制标题：** {title}",
-            f"**分析时间：** {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC",
+            f"**分析时间：** {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')} UTC",
             f"**录制时长：** {duration_str}",
             f"",
             "---",
@@ -120,7 +120,7 @@ class ReportGenerator:
         lines += [
             "---",
             "",
-            f"*报告生成时间：{datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC*",
+            f"*报告生成时间：{datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')} UTC*",
         ]
 
         return "\n".join(lines)
@@ -147,7 +147,7 @@ class ReportGenerator:
         ws_summary.append([])
         ws_summary.append(["录制标题", recording.get("title", "")])
         ws_summary.append(["录制时长", format_duration(recording.get("duration") or 0)])
-        ws_summary.append(["分析时间", datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")])
+        ws_summary.append(["分析时间", datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")])
         ws_summary.append(["问答总数", analysis.get("total_qa_count", len(analysis.get("qa_pairs") or []))])
         ws_summary.append([])
         ws_summary.append(["内容摘要", analysis.get("summary", "")])
