@@ -1,0 +1,8 @@
+2026-04-11 05:20:19 | WARNING  | audio_recorder:14 | pyaudio not available; AudioRecorder will use stub mode
+2026-04-11 05:20:19 | WARNING  | video_processor:14 | opencv-python not available; VideoProcessor running in stub mode
+2026-04-11 05:20:19 | WARNING  | ocr_engine:14 | pytesseract/Pillow not available; OcrEngine running in stub mode
+2026-04-11 05:20:25 | WARNING  | audio_recorder:14 | pyaudio not available; AudioRecorder will use stub mode
+2026-04-11 05:20:25 | INFO     | main:19 | Starting Live Stream Learning Analyzer backend v1.0.0
+2026-04-11 05:20:25 | INFO     | main:50 | Database initialised: sqlite:////home/runner/work/access-vibe-coding/access-vibe-coding/backend/storage/app.db
+2026-04-11 05:20:25 | INFO     | main:31 | Backend startup complete. Listening on 0.0.0.0:8765
+2026-04-11 05:20:33 | INFO     | main:35 | Shutting down backend…
