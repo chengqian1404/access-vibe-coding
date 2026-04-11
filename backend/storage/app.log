@@ -6,3 +6,4 @@
 2026-04-11 05:20:25 | INFO     | main:50 | Database initialised: sqlite:////home/runner/work/access-vibe-coding/access-vibe-coding/backend/storage/app.db
 2026-04-11 05:20:25 | INFO     | main:31 | Backend startup complete. Listening on 0.0.0.0:8765
 2026-04-11 05:20:33 | INFO     | main:35 | Shutting down backend…
+2026-04-11 05:23:51 | WARNING  | audio_recorder:14 | pyaudio not available; AudioRecorder will use stub mode

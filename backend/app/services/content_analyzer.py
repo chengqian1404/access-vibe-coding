@@ -19,7 +19,7 @@ ANALYSIS_PROMPT_TEMPLATE = """你是一名专业的直播内容分析师。请�
     "tone": "语气风格描述",
     "pace": "语速评估（快/中/慢）",
     "persuasion_techniques": ["技巧1", "技巧2"],
-    "professionalism": "专业度评分说明",
+    "professionalism_score": 8,
     "strengths": ["优点1", "优点2"],
     "improvements": ["建议1", "建议2"]
   }},

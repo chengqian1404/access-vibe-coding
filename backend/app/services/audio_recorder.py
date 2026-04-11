@@ -62,8 +62,9 @@ class AudioRecorder:
         if self._status == "recording":
             raise RuntimeError("Already recording")
 
-        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-        self._output_path = output_path
+        safe_output = self._safe_output_path(output_path)
+        Path(safe_output).parent.mkdir(parents=True, exist_ok=True)
+        self._output_path = safe_output
         self._device_index = device_index
         self._stop_event.clear()
         self._status = "recording"
@@ -102,6 +103,15 @@ class AudioRecorder:
     # ------------------------------------------------------------------
     # Internal
     # ------------------------------------------------------------------
+
+    @staticmethod
+    def _safe_output_path(path: str) -> str:
+        from app.config.settings import settings
+        resolved = str(Path(path).resolve())
+        storage = str(Path(settings.STORAGE_PATH).resolve())
+        if not resolved.startswith(storage):
+            raise ValueError(f"Output path '{resolved}' is outside the storage directory")
+        return resolved
 
     def _record_thread(self) -> None:
         if not PYAUDIO_AVAILABLE:

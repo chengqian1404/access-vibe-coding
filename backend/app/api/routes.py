@@ -50,6 +50,36 @@ def _get_db():
     return Session()
 
 
+def _deserialize_analysis_json_fields(analysis_dict: Dict) -> Dict:
+    """Deserialize JSON string fields stored in the Analysis model."""
+    import json
+    for field, default in (("speech_style", {}), ("key_topics", [])):
+        if isinstance(analysis_dict.get(field), str):
+            try:
+                analysis_dict[field] = json.loads(analysis_dict[field])
+            except Exception:
+                analysis_dict[field] = default
+    return analysis_dict
+
+
+def _load_analysis_and_recording(recording_id: int):
+    """Load the latest Analysis and its Recording, raising 404 if missing."""
+    db = _get_db()
+    try:
+        analysis = (
+            db.query(Analysis)
+            .filter(Analysis.recording_id == recording_id)
+            .order_by(Analysis.created_at.desc())
+            .first()
+        )
+        rec = db.query(Recording).filter(Recording.id == recording_id).first()
+        if not analysis or not rec:
+            raise HTTPException(status_code=404, detail="Analysis or recording not found")
+        return _deserialize_analysis_json_fields(analysis.to_dict()), rec.to_dict()
+    finally:
+        db.close()
+
+
 # ─────────────────────────────────────────────────────────────────────
 # Health
 # ─────────────────────────────────────────────────────────────────────
@@ -275,10 +305,12 @@ async def start_monitor(data: Optional[Dict[str, Any]] = None):
 
     from app.api.websocket import manager as ws_manager
 
+    _main_loop = asyncio.get_event_loop()
+
     def on_live(wid: str):
         asyncio.run_coroutine_threadsafe(
             ws_manager.broadcast({"type": "live_detected", "data": {"weixin_id": wid}}),
-            asyncio.get_event_loop(),
+            _main_loop,
         )
 
     _monitor_service.set_live_callback(on_live)
@@ -462,35 +494,7 @@ def get_analysis(recording_id: int):
 
 @router.get("/analysis/{recording_id}/report")
 def download_markdown_report(recording_id: int):
-    db = _get_db()
-    try:
-        analysis = (
-            db.query(Analysis)
-            .filter(Analysis.recording_id == recording_id)
-            .order_by(Analysis.created_at.desc())
-            .first()
-        )
-        rec = db.query(Recording).filter(Recording.id == recording_id).first()
-        if not analysis or not rec:
-            raise HTTPException(status_code=404, detail="Analysis or recording not found")
-        analysis_dict = analysis.to_dict()
-        recording_dict = rec.to_dict()
-    finally:
-        db.close()
-
-    import json
-    # Deserialise stored JSON strings
-    if isinstance(analysis_dict.get("speech_style"), str):
-        try:
-            analysis_dict["speech_style"] = json.loads(analysis_dict["speech_style"])
-        except Exception:
-            analysis_dict["speech_style"] = {}
-    if isinstance(analysis_dict.get("key_topics"), str):
-        try:
-            analysis_dict["key_topics"] = json.loads(analysis_dict["key_topics"])
-        except Exception:
-            analysis_dict["key_topics"] = []
-
+    analysis_dict, recording_dict = _load_analysis_and_recording(recording_id)
     md = _report_generator.generate_markdown(analysis_dict, recording_dict)
     return Response(
         content=md.encode("utf-8"),
@@ -501,34 +505,7 @@ def download_markdown_report(recording_id: int):
 
 @router.get("/analysis/{recording_id}/excel")
 def download_excel_report(recording_id: int):
-    db = _get_db()
-    try:
-        analysis = (
-            db.query(Analysis)
-            .filter(Analysis.recording_id == recording_id)
-            .order_by(Analysis.created_at.desc())
-            .first()
-        )
-        rec = db.query(Recording).filter(Recording.id == recording_id).first()
-        if not analysis or not rec:
-            raise HTTPException(status_code=404, detail="Analysis or recording not found")
-        analysis_dict = analysis.to_dict()
-        recording_dict = rec.to_dict()
-    finally:
-        db.close()
-
-    import json
-    if isinstance(analysis_dict.get("speech_style"), str):
-        try:
-            analysis_dict["speech_style"] = json.loads(analysis_dict["speech_style"])
-        except Exception:
-            analysis_dict["speech_style"] = {}
-    if isinstance(analysis_dict.get("key_topics"), str):
-        try:
-            analysis_dict["key_topics"] = json.loads(analysis_dict["key_topics"])
-        except Exception:
-            analysis_dict["key_topics"] = []
-
+    analysis_dict, recording_dict = _load_analysis_and_recording(recording_id)
     xlsx_bytes = _report_generator.generate_excel(analysis_dict, recording_dict)
     return Response(
         content=xlsx_bytes,

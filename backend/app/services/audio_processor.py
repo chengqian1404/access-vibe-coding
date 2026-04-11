@@ -62,7 +62,7 @@ class AudioProcessor:
         client = self._get_client()
         logger.info("Transcribing %s (offset=%.1fs)", audio_path, offset_seconds)
         with open(audio_path, "rb") as f:
-            response = client.audio.transcriptions.create(
+            raw = client.audio.transcriptions.create(
                 model="whisper-1",
                 file=f,
                 language="zh",
@@ -71,21 +71,25 @@ class AudioProcessor:
             )
 
         segments = []
-        if hasattr(response, "segments") and response.segments:
-            for seg in response.segments:
+        if hasattr(raw, "segments") and raw.segments:
+            for seg in raw.segments:
+                seg_dict = seg if isinstance(seg, dict) else vars(seg) if hasattr(seg, "__dict__") else {}
+                start = float(seg_dict.get("start") or getattr(seg, "start", 0.0))
+                end = float(seg_dict.get("end") or getattr(seg, "end", 0.0))
+                text = (seg_dict.get("text") or getattr(seg, "text", "")).strip()
+                logprob = float(seg_dict.get("avg_logprob") or getattr(seg, "avg_logprob", -0.3))
                 segments.append({
-                    "start": (seg.get("start") or 0.0) + offset_seconds if isinstance(seg, dict) else seg.start + offset_seconds,
-                    "end": (seg.get("end") or 0.0) + offset_seconds if isinstance(seg, dict) else seg.end + offset_seconds,
-                    "text": (seg.get("text") or "").strip() if isinstance(seg, dict) else (seg.text or "").strip(),
-                    "confidence": float(seg.get("avg_logprob", -0.3) if isinstance(seg, dict) else getattr(seg, "avg_logprob", -0.3)),
+                    "start": start + offset_seconds,
+                    "end": end + offset_seconds,
+                    "text": text,
+                    "confidence": logprob,
                 })
         else:
-            # Fallback: single segment covering the whole file
-            text = getattr(response, "text", "") or ""
+            text = getattr(raw, "text", "") or ""
             if text:
                 segments.append({
                     "start": offset_seconds,
-                    "end": offset_seconds + 0.0,
+                    "end": offset_seconds,
                     "text": text.strip(),
                     "confidence": 0.8,
                 })

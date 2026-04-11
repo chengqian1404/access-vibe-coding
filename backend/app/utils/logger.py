@@ -29,13 +29,15 @@ class WebSocketLogHandler(logging.Handler):
                 "message": msg,
                 "module": record.module,
             }
-            loop = None
             try:
-                loop = asyncio.get_event_loop()
+                loop = asyncio.get_running_loop()
+                asyncio.ensure_future(
+                    _ws_manager.broadcast({"type": "log_message", "data": data}),
+                    loop=loop,
+                )
             except RuntimeError:
+                # No running loop in this thread – skip broadcast
                 pass
-            if loop and loop.is_running():
-                asyncio.ensure_future(_ws_manager.broadcast({"type": "log_message", "data": data}))
         except Exception:
             pass
 

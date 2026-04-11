@@ -40,13 +40,14 @@ class ScreenRecorder:
             self._status = "error"
             raise FileNotFoundError("ffmpeg is not installed or not in PATH")
 
-        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-        self._output_path = output_path
+        safe_output = self._safe_output_path(output_path)
+        Path(safe_output).parent.mkdir(parents=True, exist_ok=True)
+        self._output_path = safe_output
         self._fps = fps
         if region:
             self._region = region
 
-        cmd = self._build_ffmpeg_cmd(output_path, fps)
+        cmd = self._build_ffmpeg_cmd(safe_output, fps)
         logger.info("Starting screen recording: %s", " ".join(cmd))
 
         try:
@@ -109,8 +110,9 @@ class ScreenRecorder:
         if not shutil.which("ffmpeg"):
             raise FileNotFoundError("ffmpeg not found")
 
-        import tempfile, io
-        out_file = Path("screenshot_tmp.png")
+        from app.config.settings import settings
+        out_file = Path(settings.CACHE_PATH) / "screenshot_tmp.png"
+        out_file.parent.mkdir(parents=True, exist_ok=True)
         cmd = self._build_screenshot_cmd(str(out_file))
         try:
             subprocess.run(cmd, check=True, capture_output=True, timeout=10)
@@ -123,6 +125,16 @@ class ScreenRecorder:
     # ------------------------------------------------------------------
     # Internal helpers
     # ------------------------------------------------------------------
+
+    @staticmethod
+    def _safe_output_path(path: str) -> str:
+        """Resolve and validate that the output path is inside the storage directory."""
+        from app.config.settings import settings
+        resolved = str(Path(path).resolve())
+        storage = str(Path(settings.STORAGE_PATH).resolve())
+        if not resolved.startswith(storage):
+            raise ValueError(f"Output path '{resolved}' is outside the storage directory")
+        return resolved
 
     def _build_ffmpeg_cmd(self, output_path: str, fps: int) -> list:
         if self._platform == "Windows":

@@ -47,13 +47,14 @@ class ConnectionManager:
             self.disconnect(websocket)
 
     def broadcast_sync(self, message: Dict[str, Any]) -> None:
-        """Thread-safe synchronous broadcast – posts to the running event loop."""
+        """Thread-safe synchronous broadcast – schedules on the running event loop."""
         try:
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                asyncio.ensure_future(self.broadcast(message))
-            else:
-                loop.run_until_complete(self.broadcast(message))
+            import asyncio
+            loop = asyncio.get_running_loop()
+            asyncio.ensure_future(self.broadcast(message), loop=loop)
+        except RuntimeError:
+            # No running event loop in this thread; skip broadcast
+            pass
         except Exception as exc:
             logger.debug("broadcast_sync error: %s", exc)
 
