@@ -1,0 +1,30 @@
+{
+  "app": {
+    "theme": "light",
+    "language": "zh-CN",
+    "auto_start_monitoring": false
+  },
+  "recording": {
+    "default_fps": 15,
+    "default_resolution": "1920x1080",
+    "audio_sample_rate": 44100,
+    "video_codec": "h264",
+    "audio_format": "wav"
+  },
+  "monitor": {
+    "check_interval": 30,
+    "auto_open_weixin": false,
+    "auto_start_recording": false
+  },
+  "llm": {
+    "provider": "qwen",
+    "model": "qwen-max",
+    "temperature": 0.7,
+    "max_tokens": 4000
+  },
+  "whisper": {
+    "model": "whisper-1",
+    "language": "auto",
+    "chunk_size_mb": 20
+  }
+}

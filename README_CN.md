@@ -81,11 +81,11 @@ cd frontend && npm run dev
 ### Windows
 
 ```bat
-# 1. 安装 Python 3.10+（勾选 Add to PATH）
-# 2. 安装 Node.js 18+
-# 3. 安装 FFmpeg（加入 PATH）
-# 4. 安装 Tesseract OCR 并下载 chi_sim.traineddata
-# 5. 克隆并初始化
+REM 1. 安装 Python 3.10+（勾选 Add to PATH）
+REM 2. 安装 Node.js 18+
+REM 3. 安装 FFmpeg（加入 PATH）
+REM 4. 安装 Tesseract OCR 并下载 chi_sim.traineddata
+REM 5. 克隆并初始化
 git clone https://github.com/your-org/access-vibe-coding.git
 cd access-vibe-coding
 scripts\setup-dev.bat

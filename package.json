@@ -1,0 +1,11 @@
+{
+  "name": "access-vibe-coding",
+  "version": "1.0.0",
+  "description": "直播学习分析工具 - Live Stream Learning Analyzer",
+  "scripts": {
+    "install": "cd frontend && npm install",
+    "dev": "cd frontend && npm run dev",
+    "build": "cd scripts && bash build-mac.sh"
+  },
+  "license": "MIT"
+}
