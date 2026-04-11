@@ -44,6 +44,10 @@ function ScreenshotPreview() {
 
   const handleDownload = () => {
     if (!screenshotUrl) return;
+    // Only allow data: URIs or URLs from the trusted API base URL to prevent open redirect
+    if (!screenshotUrl.startsWith('data:') && !screenshotUrl.startsWith(API_BASE_URL)) {
+      return;
+    }
     const a = document.createElement('a');
     a.href = screenshotUrl;
     a.download = `screenshot_${Date.now()}.png`;

@@ -96,7 +96,7 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
       contextIsolation: true,
-      webSecurity: false
+      webSecurity: true
     },
     title: '直播学习分析工具',
     show: false
