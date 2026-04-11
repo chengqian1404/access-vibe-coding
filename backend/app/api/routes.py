@@ -305,7 +305,7 @@ async def start_monitor(data: Optional[Dict[str, Any]] = None):
 
     from app.api.websocket import manager as ws_manager
 
-    _main_loop = asyncio.get_event_loop()
+    _main_loop = asyncio.get_running_loop()
 
     def on_live(wid: str):
         asyncio.run_coroutine_threadsafe(

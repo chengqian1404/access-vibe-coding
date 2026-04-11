@@ -73,16 +73,12 @@ class AudioProcessor:
         segments = []
         if hasattr(raw, "segments") and raw.segments:
             for seg in raw.segments:
-                seg_dict = seg if isinstance(seg, dict) else vars(seg) if hasattr(seg, "__dict__") else {}
-                start = float(seg_dict.get("start") or getattr(seg, "start", 0.0))
-                end = float(seg_dict.get("end") or getattr(seg, "end", 0.0))
-                text = (seg_dict.get("text") or getattr(seg, "text", "")).strip()
-                logprob = float(seg_dict.get("avg_logprob") or getattr(seg, "avg_logprob", -0.3))
+                normalized = self._normalize_segment(seg)
                 segments.append({
-                    "start": start + offset_seconds,
-                    "end": end + offset_seconds,
-                    "text": text,
-                    "confidence": logprob,
+                    "start": normalized["start"] + offset_seconds,
+                    "end": normalized["end"] + offset_seconds,
+                    "text": normalized["text"],
+                    "confidence": normalized["confidence"],
                 })
         else:
             text = getattr(raw, "text", "") or ""
@@ -94,6 +90,23 @@ class AudioProcessor:
                     "confidence": 0.8,
                 })
         return segments
+
+    @staticmethod
+    def _normalize_segment(seg) -> Dict:
+        """Normalize a Whisper segment (dict or object) to a plain dict."""
+        if isinstance(seg, dict):
+            return {
+                "start": float(seg.get("start") or 0.0),
+                "end": float(seg.get("end") or 0.0),
+                "text": (seg.get("text") or "").strip(),
+                "confidence": float(seg.get("avg_logprob") or -0.3),
+            }
+        return {
+            "start": float(getattr(seg, "start", 0.0)),
+            "end": float(getattr(seg, "end", 0.0)),
+            "text": (getattr(seg, "text", "") or "").strip(),
+            "confidence": float(getattr(seg, "avg_logprob", -0.3)),
+        }
 
     def _transcribe_chunked(self, audio_path: str) -> List[Dict]:
         """Split audio into ~20 MB WAV chunks and transcribe each."""
