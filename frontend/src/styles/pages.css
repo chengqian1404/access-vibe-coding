@@ -1,0 +1,48 @@
+/* Account Setup Page */
+.account-setup-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 24px;
+}
+
+/* Monitor Page */
+.monitor-page {
+  padding: 8px 0;
+}
+
+.monitor-page .live-banner {
+  margin-bottom: 16px;
+}
+
+/* Recording Page */
+.recording-page {
+  padding: 8px 0;
+}
+
+/* Analysis Page */
+.analysis-page {
+  padding: 8px 0;
+}
+
+/* History Page */
+.history-page {
+  padding: 8px 0;
+}
+
+/* Settings Page */
+.settings-page {
+  padding: 8px 0;
+  max-width: 900px;
+}
+
+/* Page titles */
+.monitor-page h4,
+.recording-page h4,
+.analysis-page h4,
+.history-page h4,
+.settings-page h4 {
+  margin-bottom: 16px;
+}

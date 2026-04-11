@@ -1,0 +1,15 @@
+:root {
+  --primary-color: #1890ff;
+  --success-color: #52c41a;
+  --warning-color: #faad14;
+  --error-color: #ff4d4f;
+  --bg-color: #f0f2f5;
+  --card-bg: #ffffff;
+  --text-color: rgba(0, 0, 0, 0.85);
+  --text-secondary: rgba(0, 0, 0, 0.45);
+  --border-color: #d9d9d9;
+  --sidebar-bg: #001529;
+  --header-height: 48px;
+  --sidebar-width: 200px;
+  --sidebar-collapsed-width: 80px;
+}
