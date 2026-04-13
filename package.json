@@ -1,0 +1,23 @@
+{
+  "name": "access-vibe-coding",
+  "version": "0.1.0",
+  "description": "AI-driven Microsoft Access automation agent using natural language instructions",
+  "keywords": [
+    "access",
+    "automation",
+    "ai",
+    "agent",
+    "llm",
+    "natural-language"
+  ],
+  "author": "chengqian1404",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chengqian1404/access-vibe-coding.git"
+  },
+  "homepage": "https://github.com/chengqian1404/access-vibe-coding#readme",
+  "bugs": {
+    "url": "https://github.com/chengqian1404/access-vibe-coding/issues"
+  }
+}
